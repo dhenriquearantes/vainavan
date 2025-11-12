@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-vainobus
+    environment:
+      POSTGRES_DB: banco_vainobus
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: vainobus
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: vainobus-api
+    ports:
+      - "8099:8099"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: banco_vainobus
+      DB_USER: postgres
+      DB_PASS: vainobus
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8099 --reload
+
+volumes:
+  postgres_data:
+

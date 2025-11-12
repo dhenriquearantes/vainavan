@@ -1,0 +1,210 @@
+{
+	"info": {
+		"name": "Vainobus API",
+		"description": "API para gerenciamento de eventos de transporte de alunos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8099",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Recursos Humanos",
+			"item": [
+				{
+					"name": "Criar Pessoa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Silva\",\n  \"dt_nascimento\": \"1990-01-15\",\n  \"email\": \"joao.silva@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/recursos-humanos/pessoa",
+							"host": ["{{base_url}}"],
+							"path": ["recursos-humanos", "pessoa"]
+						}
+					}
+				},
+				{
+					"name": "Listar Pessoas",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/recursos-humanos/pessoa",
+							"host": ["{{base_url}}"],
+							"path": ["recursos-humanos", "pessoa"]
+						}
+					}
+				},
+				{
+					"name": "Obter Pessoa",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/recursos-humanos/pessoa/:id",
+							"host": ["{{base_url}}"],
+							"path": ["recursos-humanos", "pessoa", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Pessoa",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Silva Santos\",\n  \"dt_nascimento\": \"1990-01-15\",\n  \"email\": \"joao.santos@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/recursos-humanos/pessoa/:id",
+							"host": ["{{base_url}}"],
+							"path": ["recursos-humanos", "pessoa", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Desativar Pessoa",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/recursos-humanos/pessoa/:id",
+							"host": ["{{base_url}}"],
+							"path": ["recursos-humanos", "pessoa", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Geolocalização - IBGE",
+			"item": [
+				{
+					"name": "Listar Estados",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/geolocalizacao/estado",
+							"host": ["{{base_url}}"],
+							"path": ["geolocalizacao", "estado"]
+						}
+					}
+				},
+				{
+					"name": "Listar Municípios",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/geolocalizacao/municipio",
+							"host": ["{{base_url}}"],
+							"path": ["geolocalizacao", "municipio"]
+						}
+					}
+				},
+				{
+					"name": "Listar Municípios por Estado",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/geolocalizacao/municipio?estado=SP",
+							"host": ["{{base_url}}"],
+							"path": ["geolocalizacao", "municipio"],
+							"query": [
+								{
+									"key": "estado",
+									"value": "SP"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Buscar Município por Nome",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/geolocalizacao/municipio?nome=São Paulo",
+							"host": ["{{base_url}}"],
+							"path": ["geolocalizacao", "municipio"],
+							"query": [
+								{
+									"key": "nome",
+									"value": "São Paulo"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Obter Município por ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/geolocalizacao/municipio/:id",
+							"host": ["{{base_url}}"],
+							"path": ["geolocalizacao", "municipio", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3550308"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Listar Municípios por Sigla UF",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/geolocalizacao/municipio/estado/:sigla_uf",
+							"host": ["{{base_url}}"],
+							"path": ["geolocalizacao", "municipio", "estado", ":sigla_uf"],
+							"variable": [
+								{
+									"key": "sigla_uf",
+									"value": "SP"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}
+
