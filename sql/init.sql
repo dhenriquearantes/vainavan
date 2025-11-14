@@ -7,7 +7,7 @@ create table if not exists rh.pessoa (
     id serial primary key,
     nome text not null,
     dt_nascimento date not null,
-    email text not null,
+    email text not null unique,
     created_at timestamp default current_timestamp,
     updated_at timestamp,
     bo_ativo boolean default true
@@ -142,16 +142,28 @@ create table instituicao.curso_campus (
     constraint fk_curso_campus_curso foreign key (id_curso) references instituicao.curso(id)
 );
 
-create table inscricao.evento (
+create table if not exists inscricao.evento (
     id serial primary key,
-    ds_texto text not null,
+    titulo varchar(255) not null,
+    descricao text not null,
     dt_inicio date not null,
     dt_fim date not null,
     id_criador int not null,
-    bo_ativo boolean default true,
     created_at timestamp default current_timestamp,
     updated_at timestamp,
-    constraint fk_criador foreign key (id_criador) references rh.pessoa(id)
+    bo_ativo boolean default true,
+    constraint fk_evento_criador foreign key (id_criador) references rh.pessoa(id)
+);
+
+create table if not exists inscricao.evento_inscricao (
+    id serial primary key,
+    id_evento int not null,
+    id_pessoa int not null,
+    created_at timestamp default current_timestamp,
+    bo_ativo boolean default true,
+    constraint fk_evento_inscricao_evento foreign key (id_evento) references inscricao.evento(id),
+    constraint fk_evento_inscricao_pessoa foreign key (id_pessoa) references rh.pessoa(id),
+    constraint uq_evento_pessoa unique (id_evento, id_pessoa)
 );
 
 create index idx_pessoa_email on rh.pessoa(email);
@@ -164,4 +176,7 @@ create index idx_municipio_cod_ibge on geo.municipio(cod_ibge);
 create index idx_campus_id_municipio on instituicao.campus(id_municipio);
 create index idx_curso_campus_id_curso on instituicao.curso_campus(id_curso);
 create index idx_curso_campus_id_campus on instituicao.curso_campus(id_campus);
+create index idx_evento_id_criador on inscricao.evento(id_criador);
+create index idx_evento_inscricao_id_evento on inscricao.evento_inscricao(id_evento);
+create index idx_evento_inscricao_id_pessoa on inscricao.evento_inscricao(id_pessoa);
 
