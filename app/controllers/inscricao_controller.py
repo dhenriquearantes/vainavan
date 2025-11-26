@@ -1,71 +1,23 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import List
 from app.core.database import get_db
-from app.repositories.inscricao_repository import EventoRepository, EventoInscricaoRepository
-from app.schemas.inscricao import (
-    EventoCreate, EventoUpdate, EventoResponse,
-    EventoInscricaoCreate, EventoInscricaoResponse
-)
+from app.repositories.evento_repository import EventoRepository
+from app.repositories.inscricao_repository import EventoInscricaoRepository
+from app.repositories.rh_repository import PessoaRepository
+from app.schemas.inscricao import EventoInscricaoCreate, EventoInscricaoResponse
 
 router = APIRouter(prefix="/inscricao", tags=["Inscrição"])
-
-# =============== EVENTOS ===============
-
-
-@router.get("/evento", response_model=List[EventoResponse])
-def listar_eventos(
-    skip: int = 0,
-    limit: int = 100,
-    ativo: Optional[bool] = Query(None),
-    criador: Optional[int] = Query(None),
-    db: Session = Depends(get_db)
-):
-    repo = EventoRepository(db)
-    eventos = repo.get_all(ativo=ativo, criador=criador)
-    return eventos[skip:skip+limit]
-
-
-@router.get("/evento/{id}", response_model=EventoResponse)
-def obter_evento(id: int, db: Session = Depends(get_db)):
-    repo = EventoRepository(db)
-    evento = repo.get_by_id(id)
-    if not evento:
-        raise HTTPException(status_code=404, detail="Evento não encontrado")
-    return evento
-
-
-@router.post("/evento", response_model=EventoResponse, status_code=status.HTTP_201_CREATED)
-def criar_evento(evento: EventoCreate, db: Session = Depends(get_db)):
-    repo = EventoRepository(db)
-    return repo.create(evento.model_dump())
-
-
-@router.put("/evento/{id}", response_model=EventoResponse)
-def atualizar_evento(id: int, evento: EventoUpdate, db: Session = Depends(get_db)):
-    repo = EventoRepository(db)
-    updated = repo.update(id, evento.model_dump(exclude_unset=True))
-    if not updated:
-        raise HTTPException(status_code=404, detail="Evento não encontrado")
-    return updated
-
-
-@router.delete("/evento/{id}")
-def desativar_evento(id: int, db: Session = Depends(get_db)):
-    repo = EventoRepository(db)
-    if not repo.disable(id):
-        raise HTTPException(status_code=404, detail="Evento não encontrado")
-    return {"message": "Evento desativado com sucesso"}
-
-# =============== INSCRIÇÕES ===============
-
 
 @router.get("/evento/{id}/inscricoes", response_model=List[EventoInscricaoResponse])
 def listar_inscricoes_evento(id: int, db: Session = Depends(get_db)):
     evento_repo = EventoRepository(db)
     evento = evento_repo.get_by_id(id)
     if not evento:
-        raise HTTPException(status_code=404, detail="Evento não encontrado")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evento não encontrado"
+        )
 
     inscricao_repo = EventoInscricaoRepository(db)
     return inscricao_repo.get_all_by_evento(id)
@@ -76,7 +28,30 @@ def inscrever_pessoa(id: int, inscricao: EventoInscricaoCreate, db: Session = De
     evento_repo = EventoRepository(db)
     evento = evento_repo.get_by_id(id)
     if not evento:
-        raise HTTPException(status_code=404, detail="Evento não encontrado")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evento não encontrado"
+        )
+    
+    if not evento.bo_ativo:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Não é possível inscrever em um evento desativado"
+        )
+
+    pessoa_repo = PessoaRepository(db)
+    pessoa = pessoa_repo.get_by_id(inscricao.id_pessoa)
+    if not pessoa:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Pessoa não encontrada"
+        )
+    
+    if not pessoa.bo_ativo:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Não é possível inscrever uma pessoa desativada"
+        )
 
     inscricao_repo = EventoInscricaoRepository(db)
     return inscricao_repo.criar_inscricao(id, inscricao.id_pessoa)
@@ -87,10 +62,19 @@ def remover_inscricao(id: int, inscricao_id: int, db: Session = Depends(get_db))
     evento_repo = EventoRepository(db)
     evento = evento_repo.get_by_id(id)
     if not evento:
-        raise HTTPException(status_code=404, detail="Evento não encontrado")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evento não encontrado"
+        )
 
     inscricao_repo = EventoInscricaoRepository(db)
     if not inscricao_repo.remover_inscricao(inscricao_id):
         raise HTTPException(status_code=404, detail="Inscrição não encontrada")
 
     return {"message": "Inscrição removida com sucesso"}
+
+
+@router.get("/pessoa/{id_pessoa}", response_model=List[EventoInscricaoResponse])
+def listar_inscricoes_pessoa(id_pessoa: int, db: Session = Depends(get_db)):
+    inscricao_repo = EventoInscricaoRepository(db)
+    return inscricao_repo.get_all_by_pessoa(id_pessoa)
