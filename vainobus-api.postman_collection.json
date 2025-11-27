@@ -204,6 +204,386 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "Instituição",
+			"item": [
+				{
+					"name": "Campus",
+					"item": [
+						{
+							"name": "Listar Campus",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/instituicao/campus",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "campus"]
+								}
+							}
+						},
+						{
+							"name": "Listar Campus com Filtros",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/instituicao/campus?ativo=true&municipio=3550308&nome=Campus",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "campus"],
+									"query": [
+										{
+											"key": "ativo",
+											"value": "true",
+											"description": "Filtrar por status ativo (true/false)"
+										},
+										{
+											"key": "municipio",
+											"value": "3550308",
+											"description": "Código IBGE do município"
+										},
+										{
+											"key": "nome",
+											"value": "Campus",
+											"description": "Nome do campus para busca parcial"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Listar Campus por Estado",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/instituicao/campus/estado/:uf?ativo=true",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "campus", "estado", ":uf"],
+									"variable": [
+										{
+											"key": "uf",
+											"value": "GO"
+										}
+									],
+									"query": [
+										{
+											"key": "ativo",
+											"value": "true",
+											"description": "Filtrar por status ativo (true/false)"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Listar Campus por Município",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/instituicao/campus/municipio/:cod_ibge?ativo=true",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "campus", "municipio", ":cod_ibge"],
+									"variable": [
+										{
+											"key": "cod_ibge",
+											"value": "3550308"
+										}
+									],
+									"query": [
+										{
+											"key": "ativo",
+											"value": "true",
+											"description": "Filtrar por status ativo (true/false)"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Obter Campus",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/instituicao/campus/:id",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "campus", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Criar Campus",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id_municipio\": 3550308,\n  \"no_campus\": \"Campus Central\"\n}"
+								},
+								"options": {
+									"raw": {
+										"language": "json"
+									}
+								}
+							},
+							"url": {
+								"raw": "{{base_url}}/instituicao/campus",
+								"host": ["{{base_url}}"],
+								"path": ["instituicao", "campus"]
+							}
+						},
+						{
+							"name": "Atualizar Campus",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"no_campus\": \"Campus Central - Atualizado\"\n}"
+								},
+								"options": {
+									"raw": {
+										"language": "json"
+									}
+								}
+							},
+							"url": {
+								"raw": "{{base_url}}/instituicao/campus/:id",
+								"host": ["{{base_url}}"],
+								"path": ["instituicao", "campus", ":id"],
+								"variable": [
+									{
+										"key": "id",
+										"value": "1"
+									}
+								]
+							}
+						},
+						{
+							"name": "Desativar Campus",
+							"request": {
+								"method": "DELETE",
+								"url": {
+									"raw": "{{base_url}}/instituicao/campus/:id",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "campus", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Curso",
+					"item": [
+						{
+							"name": "Listar Cursos",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/instituicao/curso",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "curso"]
+								}
+							}
+						},
+						{
+							"name": "Listar Cursos com Filtro Ativo",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/instituicao/curso?ativo=true",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "curso"],
+									"query": [
+										{
+											"key": "ativo",
+											"value": "true",
+											"description": "Filtrar por status ativo (true/false)"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Obter Curso",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/instituicao/curso/:id",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "curso", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Criar Curso",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"no_curso\": \"Ciência da Computação\"\n}"
+								},
+								"options": {
+									"raw": {
+										"language": "json"
+									}
+								}
+							},
+							"url": {
+								"raw": "{{base_url}}/instituicao/curso",
+								"host": ["{{base_url}}"],
+								"path": ["instituicao", "curso"]
+							}
+						},
+						{
+							"name": "Atualizar Curso",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"no_curso\": \"Engenharia de Software\"\n}"
+								},
+								"options": {
+									"raw": {
+										"language": "json"
+									}
+								}
+							},
+							"url": {
+								"raw": "{{base_url}}/instituicao/curso/:id",
+								"host": ["{{base_url}}"],
+								"path": ["instituicao", "curso", ":id"],
+								"variable": [
+									{
+										"key": "id",
+										"value": "1"
+									}
+								]
+							}
+						},
+						{
+							"name": "Desativar Curso",
+							"request": {
+								"method": "DELETE",
+								"url": {
+									"raw": "{{base_url}}/instituicao/curso/:id",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "curso", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Curso-Campus",
+					"item": [
+						{
+							"name": "Listar Relações Curso-Campus",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/instituicao/curso-campus",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "curso-campus"]
+								}
+							}
+						},
+						{
+							"name": "Listar Relações com Filtros",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/instituicao/curso-campus?campus=1&curso=2",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "curso-campus"],
+									"query": [
+										{
+											"key": "campus",
+											"value": "1",
+											"description": "ID do campus"
+										},
+										{
+											"key": "curso",
+											"value": "2",
+											"description": "ID do curso"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Criar Relação Curso-Campus",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id_campus\": 1,\n  \"id_curso\": 1\n}"
+								},
+								"options": {
+									"raw": {
+										"language": "json"
+									}
+								}
+							},
+							"url": {
+								"raw": "{{base_url}}/instituicao/curso-campus",
+								"host": ["{{base_url}}"],
+								"path": ["instituicao", "curso-campus"]
+							}
+						}
+					]
+				}
+			]
 		}
 	]
 }

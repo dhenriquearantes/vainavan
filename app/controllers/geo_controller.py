@@ -26,24 +26,35 @@ async def listar_municipios(
     nome: Optional[str] = Query(None, description="Nome do município para busca")
 ):
     try:
-        if nome:
-            municipios = await IBGEService.search_municipio(nome)
-        elif estado:
+        if estado:
             municipios = await IBGEService.get_municipios_by_estado(estado.upper())
         else:
             municipios = await IBGEService.get_all_municipios()
         
-        return [
-            {
-                "id": m["id"],
-                "nome": m["nome"],
-                "microrregiao": m.get("microrregiao", {}).get("nome"),
-                "mesorregiao": m.get("microrregiao", {}).get("mesorregiao", {}).get("nome"),
-                "uf": m.get("microrregiao", {}).get("mesorregiao", {}).get("UF", {}).get("sigla"),
-                "regiao": m.get("microrregiao", {}).get("mesorregiao", {}).get("UF", {}).get("regiao", {}).get("nome")
-            }
-            for m in municipios
-        ]
+        # Filtrar por nome se fornecido (case-insensitive, busca parcial)
+        if nome:
+            nome_lower = nome.lower().strip()
+            municipios = [
+                m for m in municipios 
+                if m.get("nome") and nome_lower in m.get("nome", "").lower()
+            ]
+        
+        result = []
+        for m in municipios:
+            microrregiao = m.get("microrregiao") or {}
+            mesorregiao = microrregiao.get("mesorregiao") or {}
+            uf = mesorregiao.get("UF") or {}
+            regiao = uf.get("regiao") or {}
+            
+            result.append({
+                "id": m.get("id"),
+                "nome": m.get("nome"),
+                "microrregiao": microrregiao.get("nome"),
+                "mesorregiao": mesorregiao.get("nome"),
+                "uf": uf.get("sigla"),
+                "regiao": regiao.get("nome")
+            })
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao buscar municípios: {str(e)}")
 
@@ -54,13 +65,18 @@ async def obter_municipio(id: int):
         if not municipio:
             raise HTTPException(status_code=404, detail="Município não encontrado")
         
+        microrregiao = municipio.get("microrregiao") or {}
+        mesorregiao = microrregiao.get("mesorregiao") or {}
+        uf = mesorregiao.get("UF") or {}
+        regiao = uf.get("regiao") or {}
+        
         return {
-            "id": municipio["id"],
-            "nome": municipio["nome"],
-            "microrregiao": municipio.get("microrregiao", {}).get("nome"),
-            "mesorregiao": municipio.get("microrregiao", {}).get("mesorregiao", {}).get("nome"),
-            "uf": municipio.get("microrregiao", {}).get("mesorregiao", {}).get("UF", {}).get("sigla"),
-            "regiao": municipio.get("microrregiao", {}).get("mesorregiao", {}).get("UF", {}).get("regiao", {}).get("nome")
+            "id": municipio.get("id"),
+            "nome": municipio.get("nome"),
+            "microrregiao": microrregiao.get("nome"),
+            "mesorregiao": mesorregiao.get("nome"),
+            "uf": uf.get("sigla"),
+            "regiao": regiao.get("nome")
         }
     except HTTPException:
         raise
@@ -71,15 +87,18 @@ async def obter_municipio(id: int):
 async def listar_municipios_por_estado(sigla_uf: str):
     try:
         municipios = await IBGEService.get_municipios_by_estado(sigla_uf.upper())
-        return [
-            {
-                "id": m["id"],
-                "nome": m["nome"],
-                "microrregiao": m.get("microrregiao", {}).get("nome"),
-                "mesorregiao": m.get("microrregiao", {}).get("mesorregiao", {}).get("nome"),
+        result = []
+        for m in municipios:
+            microrregiao = m.get("microrregiao") or {}
+            mesorregiao = microrregiao.get("mesorregiao") or {}
+            
+            result.append({
+                "id": m.get("id"),
+                "nome": m.get("nome"),
+                "microrregiao": microrregiao.get("nome"),
+                "mesorregiao": mesorregiao.get("nome"),
                 "uf": sigla_uf.upper()
-            }
-            for m in municipios
-        ]
+            })
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao buscar municípios: {str(e)}")

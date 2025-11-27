@@ -39,13 +39,4 @@ class IBGEService:
             response.raise_for_status()
             return response.json()
     
-    @staticmethod
-    async def search_municipio(nome: str) -> List[Dict]:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(
-                f"{IBGEService.BASE_URL}/localidades/municipios",
-                params={"nome": nome}
-            )
-            response.raise_for_status()
-            return response.json()
 

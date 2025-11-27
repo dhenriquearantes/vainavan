@@ -87,7 +87,7 @@ create table if not exists geo.estados (
 );
 
 create table if not exists geo.municipio (
-    id serial primary key,
+    id integer primary key,
     no_municipio text not null,
     uf char(2) not null,
     cod_ibge text not null,

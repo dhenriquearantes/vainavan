@@ -15,9 +15,9 @@ class Municipio(Base):
     __tablename__ = "municipio"
     __table_args__ = {"schema": "geo"}
     
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)  # ID é o código IBGE do município
     no_municipio = Column(Text, nullable=False)
     uf = Column(Text, nullable=False)
-    cod_ibge = Column(Text, nullable=False)
+    cod_ibge = Column(Text, nullable=False)  # Mantido para referência, mas id = cod_ibge
     bo_ativo = Column(Boolean, default=True)
 
