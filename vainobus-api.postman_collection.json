@@ -584,6 +584,234 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Inscrição",
+			"item": [
+				{
+					"name": "Evento",
+					"item": [
+						{
+							"name": "Listar Eventos",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/inscricao/evento",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "evento"]
+								}
+							}
+						},
+						{
+							"name": "Listar Eventos com Filtros",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/inscricao/evento?ativo=true&criador=1",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "evento"],
+									"query": [
+										{
+											"key": "ativo",
+											"value": "true",
+											"description": "Filtrar por status ativo (true/false)"
+										},
+										{
+											"key": "criador",
+											"value": "1",
+											"description": "ID da pessoa criadora do evento"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Obter Evento",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/inscricao/evento/:id",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "evento", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Criar Evento",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"titulo\": \"Evento de Transporte\",\n  \"descricao\": \"Evento para transporte de alunos ao campus\",\n  \"dt_inicio\": \"2024-01-15\",\n  \"dt_fim\": \"2024-01-20\",\n  \"id_criador\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inscricao/evento",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "evento"]
+								}
+							}
+						},
+						{
+							"name": "Atualizar Evento",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"titulo\": \"Evento de Transporte - Atualizado\",\n  \"descricao\": \"Descrição atualizada do evento\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inscricao/evento/:id",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "evento", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Desativar Evento",
+							"request": {
+								"method": "DELETE",
+								"url": {
+									"raw": "{{base_url}}/inscricao/evento/:id",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "evento", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Evento-Inscrição",
+					"item": [
+						{
+							"name": "Listar Inscrições do Evento",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/inscricao/evento/:id/inscricoes",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "evento", ":id", "inscricoes"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Listar Inscrições da Pessoa",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/inscricao/pessoa/:id_pessoa/inscricoes",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "pessoa", ":id_pessoa", "inscricoes"],
+									"variable": [
+										{
+											"key": "id_pessoa",
+											"value": "1"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Inscrever Pessoa no Evento",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id_pessoa\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inscricao/evento/:id/inscricoes",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "evento", ":id", "inscricoes"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Remover Inscrição",
+							"request": {
+								"method": "DELETE",
+								"url": {
+									"raw": "{{base_url}}/inscricao/evento/:id/inscricoes/:inscricao_id",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "evento", ":id", "inscricoes", ":inscricao_id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										},
+										{
+											"key": "inscricao_id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						}
+					]
+				}
+			]
 		}
 	]
 }

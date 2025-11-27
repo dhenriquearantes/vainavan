@@ -5,15 +5,15 @@ from app.core.database import get_db
 from app.repositories.evento_repository import EventoRepository
 from app.schemas.evento import EventoCreate, EventoUpdate, EventoResponse
 
-router = APIRouter(prefix="/evento", tags=["Evento"])
+router = APIRouter(prefix="/inscricao/evento", tags=["Evento"])
 
 
 @router.get("", response_model=List[EventoResponse])
 def listar_eventos(
     skip: int = 0,
     limit: int = 100,
-    ativo: Optional[bool] = Query(True),
-    criador: Optional[int] = Query(None),
+    ativo: Optional[bool] = Query(None),
+    criador: Optional[int] = Query(None, description="ID da pessoa criadora do evento"),
     db: Session = Depends(get_db)
 ):
     repo = EventoRepository(db)

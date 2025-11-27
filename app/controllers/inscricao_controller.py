@@ -7,10 +7,11 @@ from app.repositories.inscricao_repository import EventoInscricaoRepository
 from app.repositories.rh_repository import PessoaRepository
 from app.schemas.inscricao import EventoInscricaoCreate, EventoInscricaoResponse
 
-router = APIRouter(prefix="/inscricao", tags=["Inscrição"])
+router = APIRouter(prefix="/inscricao", tags=["Evento-Inscrição"])
 
 @router.get("/evento/{id}/inscricoes", response_model=List[EventoInscricaoResponse])
 def listar_inscricoes_evento(id: int, db: Session = Depends(get_db)):
+    """Listar todas as inscrições de um evento"""
     evento_repo = EventoRepository(db)
     evento = evento_repo.get_by_id(id)
     if not evento:
@@ -25,6 +26,7 @@ def listar_inscricoes_evento(id: int, db: Session = Depends(get_db)):
 
 @router.post("/evento/{id}/inscricoes", response_model=EventoInscricaoResponse, status_code=status.HTTP_201_CREATED)
 def inscrever_pessoa(id: int, inscricao: EventoInscricaoCreate, db: Session = Depends(get_db)):
+    """Inscrever uma pessoa em um evento"""
     evento_repo = EventoRepository(db)
     evento = evento_repo.get_by_id(id)
     if not evento:
@@ -59,6 +61,7 @@ def inscrever_pessoa(id: int, inscricao: EventoInscricaoCreate, db: Session = De
 
 @router.delete("/evento/{id}/inscricoes/{inscricao_id}")
 def remover_inscricao(id: int, inscricao_id: int, db: Session = Depends(get_db)):
+    """Remover inscrição de um evento"""
     evento_repo = EventoRepository(db)
     evento = evento_repo.get_by_id(id)
     if not evento:
@@ -69,12 +72,16 @@ def remover_inscricao(id: int, inscricao_id: int, db: Session = Depends(get_db))
 
     inscricao_repo = EventoInscricaoRepository(db)
     if not inscricao_repo.remover_inscricao(inscricao_id):
-        raise HTTPException(status_code=404, detail="Inscrição não encontrada")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Inscrição não encontrada"
+        )
 
     return {"message": "Inscrição removida com sucesso"}
 
 
-@router.get("/pessoa/{id_pessoa}", response_model=List[EventoInscricaoResponse])
+@router.get("/pessoa/{id_pessoa}/inscricoes", response_model=List[EventoInscricaoResponse])
 def listar_inscricoes_pessoa(id_pessoa: int, db: Session = Depends(get_db)):
+    """Listar todas as inscrições de uma pessoa"""
     inscricao_repo = EventoInscricaoRepository(db)
     return inscricao_repo.get_all_by_pessoa(id_pessoa)
