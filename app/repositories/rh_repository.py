@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from typing import List, Optional
-from datetime import datetime, timezone
+from typing import List, Optional, Dict
+from datetime import datetime, timezone, date
 from app.models.rh import Pessoa
 
 class PessoaRepository:
@@ -42,4 +42,12 @@ class PessoaRepository:
         pessoa.bo_ativo = False
         self.db.commit()
         return True
-
+    
+    def enable(self, id: int) -> bool:
+        pessoa = self.get_by_id(id)
+        if not pessoa:
+            return False
+        pessoa.bo_ativo = True
+        pessoa.updated_at = datetime.now(timezone.utc)
+        self.db.commit()
+        return True
