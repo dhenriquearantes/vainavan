@@ -8,9 +8,9 @@ class PessoaCreate(BaseModel):
     email: EmailStr
 
 class PessoaUpdate(BaseModel):
-    nome: str = None
-    dt_nascimento: date = None
-    email: EmailStr = None
+    nome: Optional[str] = None
+    dt_nascimento: Optional[date] = None
+    email: Optional[EmailStr] = None
 
 class PessoaResponse(BaseModel):
     id: int
@@ -19,7 +19,7 @@ class PessoaResponse(BaseModel):
     email: str
     bo_ativo: bool
     created_at: datetime
-    updated_at: datetime = None
+    updated_at: Optional[datetime] = None
     
     class Config:
         from_attributes = True
