@@ -92,6 +92,52 @@
 					}
 				},
 				{
+					"name": "Listar Pessoas Inativas",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/recursos-humanos/pessoa/inativas?skip=0&limit=100",
+							"host": ["{{base_url}}"],
+							"path": ["recursos-humanos", "pessoa", "inativas"],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0",
+									"description": "Número de registros para pular"
+								},
+								{
+									"key": "limit",
+									"value": "100",
+									"description": "Número máximo de registros a retornar"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Listar Todas as Pessoas",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/recursos-humanos/pessoa/todas?skip=0&limit=100",
+							"host": ["{{base_url}}"],
+							"path": ["recursos-humanos", "pessoa", "todas"],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0",
+									"description": "Número de registros para pular"
+								},
+								{
+									"key": "limit",
+									"value": "100",
+									"description": "Número máximo de registros a retornar"
+								}
+							]
+						}
+					}
+				},
+				{
 					"name": "Desativar Pessoa",
 					"request": {
 						"method": "DELETE",
@@ -99,6 +145,23 @@
 							"raw": "{{base_url}}/recursos-humanos/pessoa/:id",
 							"host": ["{{base_url}}"],
 							"path": ["recursos-humanos", "pessoa", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Reativar Pessoa",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "{{base_url}}/recursos-humanos/pessoa/:id/reativar",
+							"host": ["{{base_url}}"],
+							"path": ["recursos-humanos", "pessoa", ":id", "reativar"],
 							"variable": [
 								{
 									"key": "id",
@@ -327,18 +390,18 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"id_municipio\": 3550308,\n  \"no_campus\": \"Campus Central\"\n}"
-								},
-								"options": {
-									"raw": {
-										"language": "json"
+									"raw": "{\n  \"id_municipio\": 3550308,\n  \"no_campus\": \"Campus Central\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
 									}
+								},
+								"url": {
+									"raw": "{{base_url}}/instituicao/campus",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "campus"]
 								}
-							},
-							"url": {
-								"raw": "{{base_url}}/instituicao/campus",
-								"host": ["{{base_url}}"],
-								"path": ["instituicao", "campus"]
 							}
 						},
 						{
@@ -353,24 +416,24 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"no_campus\": \"Campus Central - Atualizado\"\n}"
+									"raw": "{\n  \"no_campus\": \"Campus Central - Atualizado\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
-								"options": {
-									"raw": {
-										"language": "json"
-									}
+								"url": {
+									"raw": "{{base_url}}/instituicao/campus/:id",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "campus", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
 								}
-							},
-							"url": {
-								"raw": "{{base_url}}/instituicao/campus/:id",
-								"host": ["{{base_url}}"],
-								"path": ["instituicao", "campus", ":id"],
-								"variable": [
-									{
-										"key": "id",
-										"value": "1"
-									}
-								]
 							}
 						},
 						{
@@ -453,18 +516,18 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"no_curso\": \"Ciência da Computação\"\n}"
-								},
-								"options": {
-									"raw": {
-										"language": "json"
+									"raw": "{\n  \"no_curso\": \"Ciência da Computação\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
 									}
+								},
+								"url": {
+									"raw": "{{base_url}}/instituicao/curso",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "curso"]
 								}
-							},
-							"url": {
-								"raw": "{{base_url}}/instituicao/curso",
-								"host": ["{{base_url}}"],
-								"path": ["instituicao", "curso"]
 							}
 						},
 						{
@@ -479,24 +542,24 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"no_curso\": \"Engenharia de Software\"\n}"
+									"raw": "{\n  \"no_curso\": \"Engenharia de Software\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
-								"options": {
-									"raw": {
-										"language": "json"
-									}
+								"url": {
+									"raw": "{{base_url}}/instituicao/curso/:id",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "curso", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
 								}
-							},
-							"url": {
-								"raw": "{{base_url}}/instituicao/curso/:id",
-								"host": ["{{base_url}}"],
-								"path": ["instituicao", "curso", ":id"],
-								"variable": [
-									{
-										"key": "id",
-										"value": "1"
-									}
-								]
 							}
 						},
 						{
@@ -567,18 +630,18 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"id_campus\": 1,\n  \"id_curso\": 1\n}"
-								},
-								"options": {
-									"raw": {
-										"language": "json"
+									"raw": "{\n  \"id_campus\": 1,\n  \"id_curso\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
 									}
+								},
+								"url": {
+									"raw": "{{base_url}}/instituicao/curso-campus",
+									"host": ["{{base_url}}"],
+									"path": ["instituicao", "curso-campus"]
 								}
-							},
-							"url": {
-								"raw": "{{base_url}}/instituicao/curso-campus",
-								"host": ["{{base_url}}"],
-								"path": ["instituicao", "curso-campus"]
 							}
 						}
 					]
@@ -730,6 +793,23 @@
 									"raw": "{{base_url}}/inscricao/evento/:id/inscricoes",
 									"host": ["{{base_url}}"],
 									"path": ["inscricao", "evento", ":id", "inscricoes"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Relatório de Pessoas do Evento",
+							"request": {
+								"method": "GET",
+								"url": {
+									"raw": "{{base_url}}/inscricao/evento/:id/relatorio",
+									"host": ["{{base_url}}"],
+									"path": ["inscricao", "evento", ":id", "relatorio"],
 									"variable": [
 										{
 											"key": "id",

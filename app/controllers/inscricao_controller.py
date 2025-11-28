@@ -5,7 +5,7 @@ from app.core.database import get_db
 from app.repositories.evento_repository import EventoRepository
 from app.repositories.inscricao_repository import EventoInscricaoRepository
 from app.repositories.rh_repository import PessoaRepository
-from app.schemas.inscricao import EventoInscricaoCreate, EventoInscricaoResponse
+from app.schemas.inscricao import EventoInscricaoCreate, EventoInscricaoResponse, EventoInscricaoRelatorioResponse
 
 router = APIRouter(prefix="/inscricao", tags=["Evento-Inscrição"])
 
@@ -85,3 +85,24 @@ def listar_inscricoes_pessoa(id_pessoa: int, db: Session = Depends(get_db)):
     """Listar todas as inscrições de uma pessoa"""
     inscricao_repo = EventoInscricaoRepository(db)
     return inscricao_repo.get_all_by_pessoa(id_pessoa)
+
+
+@router.get("/evento/{id}/relatorio", response_model=List[EventoInscricaoRelatorioResponse])
+def relatorio_pessoas_evento(id: int, db: Session = Depends(get_db)):
+    """Relatório de todas as pessoas cadastradas em um evento"""
+    evento_repo = EventoRepository(db)
+    evento = evento_repo.get_by_id(id)
+    if not evento:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evento não encontrado"
+        )
+    
+    inscricao_repo = EventoInscricaoRepository(db)
+    relatorio = inscricao_repo.get_relatorio_pessoas_por_evento(id)
+    
+    # Transformar os dicionários em objetos Pydantic
+    return [
+        EventoInscricaoRelatorioResponse(**item)
+        for item in relatorio
+    ]

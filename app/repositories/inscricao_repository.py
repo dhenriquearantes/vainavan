@@ -1,6 +1,7 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List, Optional
 from app.models.inscricao import EventoInscricao
+from app.models.rh import Pessoa
 
 
 class EventoInscricaoRepository:
@@ -50,3 +51,44 @@ class EventoInscricaoRepository:
         self.db.commit()
         self.db.refresh(inscricao)
         return True
+
+    def get_relatorio_pessoas_por_evento(self, id_evento: int) -> List[dict]:
+        """
+        Busca todas as pessoas cadastradas em um evento para relatório.
+        Retorna uma lista de dicionários com dados da inscrição e da pessoa.
+        """
+        resultados = self.db.query(
+            EventoInscricao.id.label('id_inscricao'),
+            EventoInscricao.id_evento,
+            EventoInscricao.created_at.label('data_inscricao'),
+            Pessoa.id.label('pessoa_id'),
+            Pessoa.nome.label('pessoa_nome'),
+            Pessoa.email.label('pessoa_email'),
+            Pessoa.dt_nascimento.label('pessoa_dt_nascimento'),
+            Pessoa.bo_ativo.label('pessoa_bo_ativo')
+        ).join(
+            Pessoa, EventoInscricao.id_pessoa == Pessoa.id
+        ).filter(
+            EventoInscricao.id_evento == id_evento,
+            EventoInscricao.bo_ativo == True
+        ).order_by(
+            Pessoa.nome
+        ).all()
+
+        # Transformar os resultados em dicionários estruturados
+        relatorio = []
+        for row in resultados:
+            relatorio.append({
+                'id_inscricao': row.id_inscricao,
+                'id_evento': row.id_evento,
+                'data_inscricao': row.data_inscricao,
+                'pessoa': {
+                    'id': row.pessoa_id,
+                    'nome': row.pessoa_nome,
+                    'email': row.pessoa_email,
+                    'dt_nascimento': row.pessoa_dt_nascimento,
+                    'bo_ativo': row.pessoa_bo_ativo
+                }
+            })
+        
+        return relatorio
