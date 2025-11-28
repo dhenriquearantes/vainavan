@@ -7,6 +7,11 @@ class PessoaCreate(BaseModel):
     dt_nascimento: date
     email: EmailStr
 
+class PessoaUpdate(BaseModel):
+    nome: str = None
+    dt_nascimento: date = None
+    email: EmailStr = None
+
 class PessoaResponse(BaseModel):
     id: int
     nome: str
@@ -14,6 +19,7 @@ class PessoaResponse(BaseModel):
     email: str
     bo_ativo: bool
     created_at: datetime
+    updated_at: datetime = None
     
     class Config:
         from_attributes = True

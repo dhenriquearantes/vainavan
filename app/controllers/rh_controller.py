@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.core.database import get_db
 from app.repositories.rh_repository import PessoaRepository
-from app.schemas.rh import PessoaCreate, PessoaResponse
+from app.schemas.rh import PessoaCreate, PessoaUpdate, PessoaResponse
 
 router = APIRouter(prefix="/recursos-humanos", tags=["Recursos Humanos"])
 
@@ -27,9 +27,9 @@ def criar_pessoa(pessoa: PessoaCreate, db: Session = Depends(get_db)):
     return repo.create(pessoa.model_dump())
 
 @router.put("/pessoa/{id}", response_model=PessoaResponse)
-def atualizar_pessoa(id: int, pessoa: PessoaCreate, db: Session = Depends(get_db)):
+def atualizar_pessoa(id: int, pessoa: PessoaUpdate, db: Session = Depends(get_db)):
     repo = PessoaRepository(db)
-    updated = repo.update(id, pessoa.model_dump())
+    updated = repo.update(id, pessoa.model_dump(exclude_unset=True))
     if not updated:
         raise HTTPException(status_code=404, detail="Pessoa não encontrada")
     return updated
