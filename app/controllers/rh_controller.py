@@ -4,7 +4,7 @@ from typing import List, Optional
 from datetime import date
 from app.core.database import get_db
 from app.repositories.rh_repository import PessoaRepository
-from app.schemas.rh import PessoaCreate, PessoaUpdate, PessoaResponse, PessoaLoteCreate, PessoaLoteDesativar
+from app.schemas.rh import PessoaCreate, PessoaUpdate, PessoaResponse
 
 router = APIRouter(prefix="/recursos-humanos", tags=["Recursos Humanos"])
 
