@@ -11,6 +11,6 @@ class Pessoa(Base):
     dt_nascimento = Column(Date, nullable=False)
     email = Column(Text, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True))
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     bo_ativo = Column(Boolean, default=True)
 

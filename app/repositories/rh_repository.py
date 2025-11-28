@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import List, Optional
+from datetime import datetime, timezone
 from app.models.rh import Pessoa
 
 class PessoaRepository:
@@ -27,7 +28,9 @@ class PessoaRepository:
         if not pessoa:
             return None
         for key, value in pessoa_data.items():
-            setattr(pessoa, key, value)
+            if value is not None:
+                setattr(pessoa, key, value)
+        pessoa.updated_at = datetime.now(timezone.utc)
         self.db.commit()
         self.db.refresh(pessoa)
         return pessoa
